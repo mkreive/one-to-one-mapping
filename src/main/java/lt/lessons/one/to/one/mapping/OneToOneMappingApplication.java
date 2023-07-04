@@ -29,7 +29,7 @@ public class OneToOneMappingApplication {
 	}
 
 	private void deleteInstructorDetail(AppDAO appDAO) {
-		int id = 3;
+		int id = 2;
 		System.out.println("Deleting instructor detail by id: " + id);
 		appDAO.deleteInstructorDetailById(id);
 		System.out.println("Deleted!");
