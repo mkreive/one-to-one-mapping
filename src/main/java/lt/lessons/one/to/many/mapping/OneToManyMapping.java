@@ -4,6 +4,7 @@ import lt.lessons.one.to.many.mapping.dao.AppDAO;
 import lt.lessons.one.to.many.mapping.entity.Course;
 import lt.lessons.one.to.many.mapping.entity.Instructor;
 import lt.lessons.one.to.many.mapping.entity.InstructorDetail;
+import lt.lessons.one.to.many.mapping.entity.Review;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,48 +22,36 @@ public class OneToManyMapping {
 	@Bean
 	public CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			// CRUD Instructor
-//			createInstructor(appDAO);
-//			createInstructorWithCourses(appDAO);
-//			findInstructor(appDAO);
-//			updateInstructor(appDAO);
-//			deleteInstructor(appDAO);
-
-			// CRUD details
-//			finsInstructorDetail(appDAO);
-//			deleteInstructorDetail(appDAO);
-
-			// CRUD Courses
-//			findInstructorWithCourses(appDAO);
-//			findCoursesForInstructor(appDAO);
-//			updateCourse(appDAO);
-//			deleteCourse(appDAO);
-
-			// Get everything with lazy loading Instructor + Details + Courses
-//			findInstructorWithCoursesJoinFetch(appDAO);
+//			createCourseAndReviews(appDAO);
+//			findCourseAndReviews(appDAO);
+			deleteCourseAndReviews(appDAO);
 
 		};
 	}
 
-	private void deleteCourse(AppDAO appDAO) {
-		int id = 10;
-		System.out.println("Deleting course by id: " + id);
-		appDAO.deleteCourseById(id);
-		System.out.println("Deleted!");
+
+	// Instructor Methods
+	private void createInstructor(AppDAO appDAO) {
+		Instructor tempInstructor = new Instructor("Candy", "Candy", "candy@mail.com");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/candy", "guitar");
+		tempInstructor.setInstructorDetail(tempInstructorDetail);
+		System.out.println("Saving instructor: " + tempInstructor);
+		appDAO.save(tempInstructor);
+		System.out.println("Done!");
 	}
 
-	private void updateCourse(AppDAO appDAO) {
-		int id = 10;
-		System.out.println("Finding course with id: " + id);
-
-		Course tempCourse = appDAO.findCourseById(id);
-		System.out.println("Temp Course: " + tempCourse);
-
-		System.out.println("Updating course with id: " + id);
-		tempCourse.setTitle("Enjoy the simple things");
-
-		appDAO.update(tempCourse);
-		System.out.println("DONE!");
+	private void createInstructorWithCourses(AppDAO appDAO) {
+		Instructor tempInstructor = new Instructor("Candy", "Candy", "candy@mail.com");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/candy", "guitar");
+		Course tempCourse1 = new Course("Air Guitar");
+		Course tempCourse2 = new Course("Pinball Masterclass");
+		tempInstructor.setInstructorDetail(tempInstructorDetail);
+		tempInstructor.add(tempCourse1);
+		tempInstructor.add(tempCourse2);
+		appDAO.save(tempInstructor);
+		System.out.println("Saving instructor: " + tempInstructor);
+		System.out.println("Courses : " + tempInstructor.getCourses());
+		System.out.println("Done!");
 	}
 
 	private void updateInstructor(AppDAO appDAO) {
@@ -80,12 +69,74 @@ public class OneToManyMapping {
 
 	}
 
+	private void findInstructor(AppDAO appDAO) {
+		int id = 2;
+		System.out.println("Finding instructor id: " + id);
+		Instructor tempInstructor = appDAO.findInstructorById(id);
+		System.out.println("Temp instructor: " + tempInstructor);
+	}
+
+	private void findInstructorWithCourses(AppDAO appDAO) {
+		int id = 1;
+		System.out.println("Finding instructor with id: " + id);
+		Instructor tempInstructor = appDAO.findInstructorById(id);
+		System.out.println("Temp Instructor: " + tempInstructor);
+		System.out.println("Courses: " + tempInstructor.getCourses());
+	}
+
 	private void findInstructorWithCoursesJoinFetch(AppDAO appDAO) {
 		int id = 1;
 		System.out.println("Finding instructor with id: " + id);
 		Instructor tempInstructor = appDAO.findInstructorByIdJoinFetch(id);
 		System.out.println("Temp Instructor: " + tempInstructor);
 		System.out.println("Courses: " + tempInstructor.getCourses());
+		System.out.println("DONE!");
+	}
+
+	private void deleteInstructor(AppDAO appDAO) {
+		int id = 1;
+		System.out.println("Deleting instructor by id: " + id);
+		appDAO.deleteInstructorById(id);
+		System.out.println("Deleted!");
+	}
+
+
+	// Courses Methods
+	private void createCourseAndReviews(AppDAO appDAO) {
+		Course course = new Course("Pacman - How to score one million points");
+		course.addReview(new Review("Great course...loved it!"));
+		course.addReview(new Review("Cool course, job well done!"));
+		course.addReview(new Review("What a dumb course, you are an idiot!"));
+
+		System.out.println("Saving the course");
+		System.out.println(course);
+		System.out.println(course.getReviews());
+
+		appDAO.save(course);
+		System.out.println("Done");
+	}
+
+	private void findCourseAndReviews(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Finding course with id: " + id);
+
+		Course tempCourse = appDAO.findCourseAndReviewsByCOurseId(id);
+		System.out.println("Temp Course: " + tempCourse);
+		System.out.println(tempCourse.getReviews());
+		System.out.println("Done!");
+	}
+
+	private void updateCourse(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Finding course with id: " + id);
+
+		Course tempCourse = appDAO.findCourseById(id);
+		System.out.println("Temp Course: " + tempCourse);
+
+		System.out.println("Updating course with id: " + id);
+		tempCourse.setTitle("Enjoy the simple things");
+
+		appDAO.update(tempCourse);
 		System.out.println("DONE!");
 	}
 
@@ -100,32 +151,26 @@ public class OneToManyMapping {
 		tempInstructor.setCourses(courses);
 		System.out.println("Courses: " + tempInstructor.getCourses());
 		System.out.println("DONE!");
+	}
 
+	private void deleteCourse(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Deleting course by id: " + id);
+		appDAO.deleteCourseById(id);
+		System.out.println("Deleted!");
+	}
+
+	private void deleteCourseAndReviews(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Finding course with id: " + id);
+
+		appDAO.deleteCourseById(id);
+		System.out.println("done!");
 
 	}
 
-	private void findInstructorWithCourses(AppDAO appDAO) {
-		int id = 1;
-		System.out.println("Finding instructor with id: " + id);
-		Instructor tempInstructor = appDAO.findInstructorById(id);
-		System.out.println("Temp Instructor: " + tempInstructor);
-		System.out.println("Courses: " + tempInstructor.getCourses());
-	}
 
-	private void createInstructorWithCourses(AppDAO appDAO) {
-		Instructor tempInstructor = new Instructor("Candy", "Candy", "candy@mail.com");
-		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/candy", "guitar");
-		Course tempCourse1 = new Course("Air Guitar");
-		Course tempCourse2 = new Course("Pinball Masterclass");
-		tempInstructor.setInstructorDetail(tempInstructorDetail);
-		tempInstructor.add(tempCourse1);
-		tempInstructor.add(tempCourse2);
-		appDAO.save(tempInstructor);
-		System.out.println("Saving instructor: " + tempInstructor);
-		System.out.println("Courses : " + tempInstructor.getCourses());
-		System.out.println("Done!");
-	}
-
+	// Details Methods
 	private void deleteInstructorDetail(AppDAO appDAO) {
 		int id = 2;
 		System.out.println("Deleting instructor detail by id: " + id);
@@ -141,26 +186,5 @@ public class OneToManyMapping {
 		System.out.println("An associated instructor: " +  tempInstructorDetail.getInstructor());
 	}
 
-	private void deleteInstructor(AppDAO appDAO) {
-		int id = 1;
-		System.out.println("Deleting instructor by id: " + id);
-		appDAO.deleteInstructorById(id);
-		System.out.println("Deleted!");
-	}
 
-	private void findInstructor(AppDAO appDAO) {
-		int id = 2;
-		System.out.println("Finding instructor id: " + id);
-		Instructor tempInstructor = appDAO.findInstructorById(id);
-		System.out.println("Temp instructor: " + tempInstructor);
-	}
-
-	private void createInstructor(AppDAO appDAO) {
-		Instructor tempInstructor = new Instructor("Candy", "Candy", "candy@mail.com");
-		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/candy", "guitar");
-		tempInstructor.setInstructorDetail(tempInstructorDetail);
-		System.out.println("Saving instructor: " + tempInstructor);
-		appDAO.save(tempInstructor);
-		System.out.println("Done!");
-	}
 }
