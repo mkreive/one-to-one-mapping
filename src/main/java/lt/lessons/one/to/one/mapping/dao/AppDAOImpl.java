@@ -2,6 +2,7 @@ package lt.lessons.one.to.one.mapping.dao;
 
 import jakarta.persistence.EntityManager;
 import lt.lessons.one.to.one.mapping.entity.Instructor;
+import lt.lessons.one.to.one.mapping.entity.InstructorDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +31,17 @@ public class AppDAOImpl implements AppDAO {
     public void deleteInstructorById(int id) {
         Instructor tempInstructor = entityManager.find(Instructor.class, id);
         entityManager.remove(tempInstructor);
+    }
+
+    @Override
+    public InstructorDetail findInstructorDetailById(int id) {
+        return entityManager.find(InstructorDetail.class, id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteInstructorDetailById(int id) {
+        InstructorDetail tempInstructorDetail = entityManager.find(InstructorDetail.class, id);
+        entityManager.remove(tempInstructorDetail);
     }
 }

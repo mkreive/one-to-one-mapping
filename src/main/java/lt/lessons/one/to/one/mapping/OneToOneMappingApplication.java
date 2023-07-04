@@ -22,7 +22,25 @@ public class OneToOneMappingApplication {
 //			createInstructor(appDAO);
 //			findInstructor(appDAO);
 //			deleteInstructor(appDAO);
+
+//			finsInstructorDetail(appDAO);
+			deleteInstructorDetail(appDAO);
 		};
+	}
+
+	private void deleteInstructorDetail(AppDAO appDAO) {
+		int id = 3;
+		System.out.println("Deleting instructor detail by id: " + id);
+		appDAO.deleteInstructorDetailById(id);
+		System.out.println("Deleted!");
+	}
+
+	private void finsInstructorDetail(AppDAO appDAO) {
+		int id = 1;
+		System.out.println("Finding instructor Detail with id: " + id);
+		InstructorDetail tempInstructorDetail = appDAO.findInstructorDetailById(id);
+		System.out.println("Temp instructor detail: " + tempInstructorDetail);
+		System.out.println("An associated instructor: " +  tempInstructorDetail.getInstructor());
 	}
 
 	private void deleteInstructor(AppDAO appDAO) {
@@ -40,8 +58,8 @@ public class OneToOneMappingApplication {
 	}
 
 	private void createInstructor(AppDAO appDAO) {
-		Instructor tempInstructor = new Instructor("Anna", "Lucky", "lucky@mail.com");
-		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/anna", "books");
+		Instructor tempInstructor = new Instructor("Candy", "Candy", "candy@mail.com");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/candy", "guitar");
 		tempInstructor.setInstructorDetail(tempInstructorDetail);
 		System.out.println("Saving instructor: " + tempInstructor);
 		appDAO.save(tempInstructor);
