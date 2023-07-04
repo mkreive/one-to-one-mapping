@@ -1,8 +1,8 @@
-package lt.lessons.one.to.one.mapping.dao;
+package lt.lessons.one.to.many.mapping.dao;
 
 import jakarta.persistence.EntityManager;
-import lt.lessons.one.to.one.mapping.entity.Instructor;
-import lt.lessons.one.to.one.mapping.entity.InstructorDetail;
+import lt.lessons.one.to.many.mapping.entity.Instructor;
+import lt.lessons.one.to.many.mapping.entity.InstructorDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

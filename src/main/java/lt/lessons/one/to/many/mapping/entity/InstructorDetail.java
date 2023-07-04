@@ -1,4 +1,4 @@
-package lt.lessons.one.to.one.mapping.entity;
+package lt.lessons.one.to.many.mapping.entity;
 
 import jakarta.persistence.*;
 

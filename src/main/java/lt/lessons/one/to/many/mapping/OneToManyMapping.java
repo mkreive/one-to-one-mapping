@@ -1,31 +1,49 @@
-package lt.lessons.one.to.one.mapping;
+package lt.lessons.one.to.many.mapping;
 
-import lt.lessons.one.to.one.mapping.dao.AppDAO;
-import lt.lessons.one.to.one.mapping.entity.Instructor;
-import lt.lessons.one.to.one.mapping.entity.InstructorDetail;
+import lt.lessons.one.to.many.mapping.dao.AppDAO;
+import lt.lessons.one.to.many.mapping.entity.Course;
+import lt.lessons.one.to.many.mapping.entity.Instructor;
+import lt.lessons.one.to.many.mapping.entity.InstructorDetail;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class OneToOneMappingApplication {
+public class OneToManyMapping {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OneToOneMappingApplication.class, args);
+		SpringApplication.run(OneToManyMapping.class, args);
 	}
 
 	@Bean
 	public CommandLineRunner commandLineRunner(AppDAO appDAO) {
 		return runner -> {
-			// CRUD
+			// CRUD Instructor
 //			createInstructor(appDAO);
 //			findInstructor(appDAO);
 //			deleteInstructor(appDAO);
 
+			// CRUD details
 //			finsInstructorDetail(appDAO);
-			deleteInstructorDetail(appDAO);
+//			deleteInstructorDetail(appDAO);
+
+			createInstructorWithCourses(appDAO);
 		};
+	}
+
+	private void createInstructorWithCourses(AppDAO appDAO) {
+		Instructor tempInstructor = new Instructor("Candy", "Candy", "candy@mail.com");
+		InstructorDetail tempInstructorDetail = new InstructorDetail("http//www.youtube.com/candy", "guitar");
+		Course tempCourse1 = new Course("Air Guitar");
+		Course tempCourse2 = new Course("Pinball Masterclass");
+		tempInstructor.setInstructorDetail(tempInstructorDetail);
+		tempInstructor.add(tempCourse1);
+		tempInstructor.add(tempCourse2);
+		appDAO.save(tempInstructor);
+		System.out.println("Saving instructor: " + tempInstructor);
+		System.out.println("Courses : " + tempInstructor.getCourses());
+		System.out.println("Done!");
 	}
 
 	private void deleteInstructorDetail(AppDAO appDAO) {

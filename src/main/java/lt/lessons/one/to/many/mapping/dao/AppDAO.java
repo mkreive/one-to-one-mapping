@@ -1,7 +1,7 @@
-package lt.lessons.one.to.one.mapping.dao;
+package lt.lessons.one.to.many.mapping.dao;
 
-import lt.lessons.one.to.one.mapping.entity.Instructor;
-import lt.lessons.one.to.one.mapping.entity.InstructorDetail;
+import lt.lessons.one.to.many.mapping.entity.Instructor;
+import lt.lessons.one.to.many.mapping.entity.InstructorDetail;
 
 public interface AppDAO {
     void save(Instructor instructor);

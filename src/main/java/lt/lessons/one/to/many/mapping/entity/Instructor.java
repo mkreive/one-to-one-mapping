@@ -1,11 +1,13 @@
-package lt.lessons.one.to.one.mapping.entity;
+package lt.lessons.one.to.many.mapping.entity;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "instructor")
 public class Instructor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -13,14 +15,19 @@ public class Instructor {
 
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "email")
     private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instructor_detail_id")
-    private InstructorDetail instructorDetail;
+    private lt.lessons.one.to.many.mapping.entity.InstructorDetail instructorDetail;
+
+    @OneToMany(mappedBy = "instructor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Course> courses;
 
     public Instructor() {
     }
@@ -63,12 +70,30 @@ public class Instructor {
         this.email = email;
     }
 
-    public InstructorDetail getInstructorDetail() {
+    public lt.lessons.one.to.many.mapping.entity.InstructorDetail getInstructorDetail() {
         return instructorDetail;
     }
 
-    public void setInstructorDetail(InstructorDetail instructorDetail) {
+    public void setInstructorDetail(lt.lessons.one.to.many.mapping.entity.InstructorDetail instructorDetail) {
         this.instructorDetail = instructorDetail;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    // bi-directional relationships
+    public void add(Course tempCourse) {
+        if(courses == null) {
+            courses = new ArrayList<>();
+        }
+
+        courses.add(tempCourse);
+        tempCourse.setInstructor(this);
     }
 
     @Override
