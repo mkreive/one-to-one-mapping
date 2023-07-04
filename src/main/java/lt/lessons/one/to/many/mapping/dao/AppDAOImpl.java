@@ -19,10 +19,18 @@ public class AppDAOImpl implements AppDAO {
     public AppDAOImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    // Instructor CRUD implementations
     @Override
     @Transactional
     public void save(Instructor instructor) {
         entityManager.persist(instructor);
+    }
+
+    @Override
+    @Transactional
+    public void update(Instructor instructor) {
+        entityManager.merge(instructor);
     }
 
     @Override
@@ -34,9 +42,14 @@ public class AppDAOImpl implements AppDAO {
     @Transactional // transactional used because we do modifications in database
     public void deleteInstructorById(int id) {
         Instructor tempInstructor = entityManager.find(Instructor.class, id);
+        List<Course> courses = tempInstructor.getCourses();
+        for(Course tempCourse: courses) {
+            tempCourse.setInstructor(null);
+        }
         entityManager.remove(tempInstructor);
     }
 
+    // Details CRUD implementations
     @Override
     public InstructorDetail findInstructorDetailById(int id) {
         return entityManager.find(InstructorDetail.class, id);
@@ -51,6 +64,12 @@ public class AppDAOImpl implements AppDAO {
         entityManager.remove(tempInstructorDetail);
     }
 
+    // Courses CRUD implementations
+    @Override
+    public Course findCourseById(int id) {
+        return entityManager.find(Course.class, id);
+    }
+
     @Override
     public List<Course> findCoursesByInstructorId(int id) {
         TypedQuery<Course> query = entityManager.createQuery("from Course where instructor.id = :data", Course.class);
@@ -59,11 +78,27 @@ public class AppDAOImpl implements AppDAO {
     }
 
     @Override
+    @Transactional
+    public void update(Course course) {
+        entityManager.merge(course);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourseById(int id) {
+        Course course = entityManager.find(Course.class,id);
+        entityManager.remove(course);
+    }
+
+
+    // find everything Instructor + Details + Courses
+    @Override
     public Instructor findInstructorByIdJoinFetch(int id) {
 
         TypedQuery<Instructor> query = entityManager.createQuery(
                 "select i from Instructor i "
                         + "JOIN FETCH i.courses "
+                        + "JOIN FETCH i.instructorDetail "
                         + "where i.id = :data", Instructor.class);
         query.setParameter("data", id);
 

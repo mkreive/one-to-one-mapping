@@ -23,22 +23,61 @@ public class OneToManyMapping {
 		return runner -> {
 			// CRUD Instructor
 //			createInstructor(appDAO);
+//			createInstructorWithCourses(appDAO);
 //			findInstructor(appDAO);
+//			updateInstructor(appDAO);
 //			deleteInstructor(appDAO);
 
 			// CRUD details
 //			finsInstructorDetail(appDAO);
 //			deleteInstructorDetail(appDAO);
 
-//			createInstructorWithCourses(appDAO);
-
+			// CRUD Courses
 //			findInstructorWithCourses(appDAO);
-
 //			findCoursesForInstructor(appDAO);
+//			updateCourse(appDAO);
+//			deleteCourse(appDAO);
 
-			findInstructorWithCoursesJoinFetch(appDAO);
+			// Get everything with lazy loading Instructor + Details + Courses
+//			findInstructorWithCoursesJoinFetch(appDAO);
 
 		};
+	}
+
+	private void deleteCourse(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Deleting course by id: " + id);
+		appDAO.deleteCourseById(id);
+		System.out.println("Deleted!");
+	}
+
+	private void updateCourse(AppDAO appDAO) {
+		int id = 10;
+		System.out.println("Finding course with id: " + id);
+
+		Course tempCourse = appDAO.findCourseById(id);
+		System.out.println("Temp Course: " + tempCourse);
+
+		System.out.println("Updating course with id: " + id);
+		tempCourse.setTitle("Enjoy the simple things");
+
+		appDAO.update(tempCourse);
+		System.out.println("DONE!");
+	}
+
+	private void updateInstructor(AppDAO appDAO) {
+		int id = 1;
+		System.out.println("Finding instructor with id: " + id);
+
+		Instructor tempInstructor = appDAO.findInstructorById(id);
+		System.out.println("Temp Instructor: " + tempInstructor);
+
+		System.out.println("Updating instructor with id: " + id);
+		tempInstructor.setLastName("TESTER");
+
+		appDAO.update(tempInstructor);
+		System.out.println("DONE!");
+
 	}
 
 	private void findInstructorWithCoursesJoinFetch(AppDAO appDAO) {
