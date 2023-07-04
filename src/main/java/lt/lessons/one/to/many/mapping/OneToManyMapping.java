@@ -9,6 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @SpringBootApplication
 public class OneToManyMapping {
 
@@ -28,8 +30,47 @@ public class OneToManyMapping {
 //			finsInstructorDetail(appDAO);
 //			deleteInstructorDetail(appDAO);
 
-			createInstructorWithCourses(appDAO);
+//			createInstructorWithCourses(appDAO);
+
+//			findInstructorWithCourses(appDAO);
+
+//			findCoursesForInstructor(appDAO);
+
+			findInstructorWithCoursesJoinFetch(appDAO);
+
 		};
+	}
+
+	private void findInstructorWithCoursesJoinFetch(AppDAO appDAO) {
+		int id = 1;
+		System.out.println("Finding instructor with id: " + id);
+		Instructor tempInstructor = appDAO.findInstructorByIdJoinFetch(id);
+		System.out.println("Temp Instructor: " + tempInstructor);
+		System.out.println("Courses: " + tempInstructor.getCourses());
+		System.out.println("DONE!");
+	}
+
+	private void findCoursesForInstructor(AppDAO appDAO) {
+		// with lazy loading
+		int id = 1;
+		System.out.println("Finding instructor with id: " + id);
+		Instructor tempInstructor = appDAO.findInstructorById(id);
+		System.out.println("Temp Instructor: " + tempInstructor);
+		System.out.println("Finding courses for instructor with id: " + id);
+		List<Course> courses = appDAO.findCoursesByInstructorId(id);
+		tempInstructor.setCourses(courses);
+		System.out.println("Courses: " + tempInstructor.getCourses());
+		System.out.println("DONE!");
+
+
+	}
+
+	private void findInstructorWithCourses(AppDAO appDAO) {
+		int id = 1;
+		System.out.println("Finding instructor with id: " + id);
+		Instructor tempInstructor = appDAO.findInstructorById(id);
+		System.out.println("Temp Instructor: " + tempInstructor);
+		System.out.println("Courses: " + tempInstructor.getCourses());
 	}
 
 	private void createInstructorWithCourses(AppDAO appDAO) {
