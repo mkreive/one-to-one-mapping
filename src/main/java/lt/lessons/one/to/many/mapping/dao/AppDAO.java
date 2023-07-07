@@ -3,6 +3,7 @@ package lt.lessons.one.to.many.mapping.dao;
 import lt.lessons.one.to.many.mapping.entity.Course;
 import lt.lessons.one.to.many.mapping.entity.Instructor;
 import lt.lessons.one.to.many.mapping.entity.InstructorDetail;
+import lt.lessons.one.to.many.mapping.entity.Student;
 
 import java.util.List;
 
@@ -39,7 +40,18 @@ public interface AppDAO {
 
     Course findCourseAndReviewsByCOurseId(int id);
 
-    // Reviews CRUD
+    Course findCourseAndStudentByCOurseId(int id);
+
+    void update(Student student);
+
+
+    // Student CRUD
+    Student findStudentAndCoursesByStudentId(int id);
+
+    void deleteStudentById(int id);
+
+
+
 
 
 }

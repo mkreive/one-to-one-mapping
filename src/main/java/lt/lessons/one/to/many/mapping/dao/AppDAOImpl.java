@@ -5,6 +5,7 @@ import jakarta.persistence.TypedQuery;
 import lt.lessons.one.to.many.mapping.entity.Course;
 import lt.lessons.one.to.many.mapping.entity.Instructor;
 import lt.lessons.one.to.many.mapping.entity.InstructorDetail;
+import lt.lessons.one.to.many.mapping.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +105,42 @@ public class AppDAOImpl implements AppDAO {
                         + "where c.id = :data", Course.class);
         query.setParameter("data", id);
         return query.getSingleResult();
+    }
+
+    @Override
+    public Course findCourseAndStudentByCOurseId(int id) {
+
+        TypedQuery<Course> query = entityManager.createQuery(
+                "select c from Course c "
+                        + "JOIN FETCH c.students "
+                        + "where c.id = :data", Course.class);
+        query.setParameter("data", id);
+        return query.getSingleResult();
+    }
+
+    @Override
+    @Transactional
+    public void update(Student student) {
+    entityManager.merge(student);
+    }
+
+    @Override
+    public Student findStudentAndCoursesByStudentId(int id) {
+        TypedQuery<Student> query = entityManager.createQuery(
+                "select s from Student s "
+                        + "JOIN FETCH s.courses "
+                        + "where s.id = :data", Student.class);
+        query.setParameter("data", id);
+        return query.getSingleResult();
+    }
+
+    @Override
+    @Transactional
+    public void deleteStudentById(int id) {
+
+        Student student = entityManager.find(Student.class,id);
+        entityManager.remove(student);
+
     }
 
 
